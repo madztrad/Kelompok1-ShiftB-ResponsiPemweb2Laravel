@@ -55,12 +55,12 @@ banyak JavaScript.
 
 ## 👥 Tim & Pembagian Tugas
 
-| Peran | Nama | Tanggung Jawab Utama |
-| :--- | :--- | :--- |
-| 🎯 **Project Manager** | _[Nama PM]_ | Mengatur timeline, koordinasi tim, review hasil kerja, memastikan target selesai |
-| ⚙️ **Backend Developer** | **Dimas** | Model, migrasi database, controller, logika Livewire, validasi & keamanan |
-| 🎨 **Frontend Developer** | **Rasta** | Tampilan Blade, komponen Livewire, styling Tailwind CSS, layout responsif |
-| 🎨 **Frontend Developer** | **Hafiz** | Tampilan Blade, komponen Livewire, styling Tailwind CSS, interaksi UI/UX |
+| Peran                     | Nama      | Tanggung Jawab Utama                                                             |
+| :------------------------ | :-------- | :------------------------------------------------------------------------------- |
+| 🎯 **Project Manager**    | **Faiz**  | Mengatur timeline, koordinasi tim, review hasil kerja, memastikan target selesai |
+| ⚙️ **Backend Developer**  | **Dimas** | Model, migrasi database, controller, logika Livewire, validasi & keamanan        |
+| 🎨 **Frontend Developer** | **Rasta** | Tampilan Blade, komponen Livewire, styling Tailwind CSS, layout responsif        |
+| 🎨 **Frontend Developer** | **Hafiz** | Tampilan Blade, komponen Livewire, styling Tailwind CSS, interaksi UI/UX         |
 
 <details>
 <summary><b>Klik untuk melihat rincian tanggung jawab tiap peran</b></summary>
@@ -68,18 +68,21 @@ banyak JavaScript.
 <br>
 
 **🎯 Project Manager**
+
 - Menyusun rencana kerja dan target setiap tahap.
 - Membagi tugas dan memastikan tidak ada pekerjaan yang tumpang tindih.
 - Melakukan review sebelum kode di-merge ke `main`.
 - Menjadi penghubung komunikasi antar anggota tim.
 
 **⚙️ Backend Developer (Dimas)**
+
 - Merancang struktur database (migrasi, relasi, seeder).
 - Membuat Model dan relasi Eloquent.
 - Menulis logika pada komponen Livewire dan controller.
 - Menangani validasi input, autentikasi, dan keamanan data.
 
 **🎨 Frontend Developer (Rasta & Hafiz)**
+
 - Menyusun layout dan komponen tampilan menggunakan Blade.
 - Menghubungkan UI dengan state Livewire (`wire:model`, `wire:click`, dll).
 - Styling dengan Tailwind CSS agar tampilan rapi dan responsif.
@@ -249,14 +252,14 @@ perbaikan/<nama-bug>    contoh: perbaikan/validasi-form
 
 **Konvensi pesan commit**
 
-| Tipe | Keterangan |
-| :--- | :--- |
-| `feat:` | Menambah fitur baru |
-| `fix:` | Memperbaiki bug |
-| `style:` | Perubahan tampilan/styling |
+| Tipe        | Keterangan                                |
+| :---------- | :---------------------------------------- |
+| `feat:`     | Menambah fitur baru                       |
+| `fix:`      | Memperbaiki bug                           |
+| `style:`    | Perubahan tampilan/styling                |
 | `refactor:` | Perbaikan struktur kode tanpa ubah fungsi |
-| `docs:` | Perubahan dokumentasi |
-| `test:` | Menambah/memperbaiki pengujian |
+| `docs:`     | Perubahan dokumentasi                     |
+| `test:`     | Menambah/memperbaiki pengujian            |
 
 </details>
 
@@ -267,6 +270,7 @@ perbaikan/<nama-bug>    contoh: perbaikan/validasi-form
 Gunakan checklist ini untuk memantau progres. Centang dengan mengubah `[ ]` menjadi `[x]`.
 
 ### Backend (Dimas)
+
 - [ ] Membuat migrasi tabel utama
 - [ ] Membuat Model dan relasi Eloquent
 - [ ] Membuat seeder data contoh
@@ -274,6 +278,7 @@ Gunakan checklist ini untuk memantau progres. Centang dengan mengubah `[ ]` menj
 - [ ] Menambahkan validasi input
 
 ### Frontend (Rasta & Hafiz)
+
 - [ ] Menyusun layout utama (header, footer)
 - [ ] Membuat komponen Livewire untuk tampilan
 - [ ] Styling halaman dengan Tailwind CSS
@@ -281,6 +286,7 @@ Gunakan checklist ini untuk memantau progres. Centang dengan mengubah `[ ]` menj
 - [ ] Menambahkan umpan balik UI (loading, notifikasi)
 
 ### Bersama
+
 - [ ] Integrasi backend & frontend
 - [ ] Pengujian fitur (Pest)
 - [ ] Finalisasi dokumentasi
@@ -289,16 +295,16 @@ Gunakan checklist ini untuk memantau progres. Centang dengan mengubah `[ ]` menj
 
 ## 📜 Perintah Penting
 
-| Perintah | Fungsi |
-| :--- | :--- |
-| `composer run dev` | Menjalankan server + Vite + queue sekaligus |
-| `composer run setup` | Setup awal proyek dari nol |
-| `composer run test` | Lint + static analysis + menjalankan tes |
-| `vendor/bin/pint --dirty` | Memperbaiki format kode PHP |
-| `npm run dev` | Menjalankan Vite (hot reload) |
-| `npm run build` | Build aset untuk produksi |
-| `php artisan migrate` | Menjalankan migrasi database |
-| `php artisan route:list` | Melihat daftar rute |
+| Perintah                  | Fungsi                                      |
+| :------------------------ | :------------------------------------------ |
+| `composer run dev`        | Menjalankan server + Vite + queue sekaligus |
+| `composer run setup`      | Setup awal proyek dari nol                  |
+| `composer run test`       | Lint + static analysis + menjalankan tes    |
+| `vendor/bin/pint --dirty` | Memperbaiki format kode PHP                 |
+| `npm run dev`             | Menjalankan Vite (hot reload)               |
+| `npm run build`           | Build aset untuk produksi                   |
+| `php artisan migrate`     | Menjalankan migrasi database                |
+| `php artisan route:list`  | Melihat daftar rute                         |
 
 ---
 
