@@ -14,7 +14,7 @@
         </p>
 
         <div class="mt-8 flex flex-wrap justify-center gap-3">
-            <a href="#" class="rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700">
+            <a href="{{ route('login') }}" class="rounded-full bg-gray-900 px-6 py-3 text-sm font-semibold text-white hover:bg-gray-700">
                 Lapor Barang
             </a>
             <a href="#cara-kerja" class="rounded-full border border-gray-300 px-6 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50">
@@ -98,7 +98,7 @@
                     <div class="text-2xl">📦</div>
                     <div class="mt-2 text-sm font-medium">Lainnya</div>
                 </a>
-                <a href="#" class="rounded-xl border border-dashed border-gray-300 p-4 text-center hover:border-emerald-400 hover:bg-emerald-50/50">
+                <a href="{{ route('login') }}" class="rounded-xl border border-dashed border-gray-300 p-4 text-center hover:border-emerald-400 hover:bg-emerald-50/50">
                     <div class="text-2xl">➕</div>
                     <div class="mt-2 text-sm font-medium">Lapor Sekarang</div>
                 </a>
@@ -111,7 +111,7 @@
         <div class="mx-auto max-w-5xl rounded-2xl bg-gray-900 px-6 py-12 text-center text-white">
             <h2 class="text-2xl font-bold sm:text-3xl">Siap melaporkan barangmu?</h2>
             <p class="mt-3 text-gray-300">Daftar gratis dan mulai sekarang juga.</p>
-            <a href="#" class="mt-6 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-100">
+            <a href="{{ route('register') }}" class="mt-6 inline-block rounded-full bg-white px-6 py-3 text-sm font-semibold text-gray-900 hover:bg-gray-100">
                 Daftar Gratis
             </a>
         </div>

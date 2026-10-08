@@ -22,10 +22,22 @@
                     <a href="#daftar" class="hover:text-gray-900">Gabung</a>
                 </nav>
 
-                <div class="flex gap-2 text-sm">
-                    <a href="#" class="rounded-full px-4 py-2 hover:bg-gray-100">Masuk</a>
-                    <a href="#" class="rounded-full bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">Daftar</a>
-                </div>
+                @if (session('api_token'))
+                    <div class="flex items-center gap-3 text-sm">
+                        <span class="hidden text-gray-600 sm:inline">Halo, {{ session('user.name') }}</span>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="rounded-full border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                Keluar
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex gap-2 text-sm">
+                        <a href="{{ route('login') }}" class="rounded-full px-4 py-2 hover:bg-gray-100">Masuk</a>
+                        <a href="{{ route('register') }}" class="rounded-full bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">Daftar</a>
+                    </div>
+                @endif
             </div>
         </header>
 
