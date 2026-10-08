@@ -1,28 +1,53 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Enums\ModerationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Item\ItemFilterRequest;
-use App\Http\Requests\Item\ModerateItemRequest;
 use App\Http\Requests\Item\StoreItemRequest;
 use App\Http\Requests\Item\UpdateItemRequest;
 use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Services\ItemPhotoService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 
-/** CRUD + moderasi semua laporan barang (khusus admin). */
 class ItemController extends Controller
 {
-    /** Semua laporan, semua status. Filter utama: ?moderation_status=pending */
+    /** Publik (beranda): hanya laporan yang sudah disetujui admin. */
     public function index(ItemFilterRequest $request): AnonymousResourceCollection
     {
-        $items = Item::with(['category', 'user:id,name'])
+        $items = Item::approved()
+            ->with(['category', 'user:id,name'])
+            ->filter($request->filters())
+            ->latest('id')
+            ->paginate($request->perPage());
+
+        return ItemResource::collection($items);
+    }
+
+    /** Publik untuk laporan approved; pending/blocked hanya pemilik & admin. */
+    public function show(Request $request, Item $item): ItemResource
+    {
+        $viewer = $request->user('sanctum');
+        $canView = $item->isApproved()
+            || ($viewer && ($viewer->isAdmin() || $viewer->id === $item->user_id));
+
+        abort_unless($canView, 404);
+
+        return ItemResource::make($item->load(['category', 'user:id,name'])->loadCount('claims'));
+    }
+
+    /** Laporan milik pengguna yang sedang login (semua status moderasi). */
+    public function mine(ItemFilterRequest $request): AnonymousResourceCollection
+    {
+        $items = $request->user()->items()
+            ->with('category')
             ->withCount('claims')
             ->filter($request->filters())
             ->latest('id')
@@ -31,22 +56,13 @@ class ItemController extends Controller
         return ItemResource::collection($items);
     }
 
-    public function show(Item $item): ItemResource
-    {
-        return ItemResource::make($item->load(['category', 'user:id,name', 'moderator:id,name'])->loadCount('claims'));
-    }
-
-    /** Admin yang membuat laporan langsung berstatus approved. */
+    /** Buat laporan baru → status moderasi otomatis "pending". */
     public function store(StoreItemRequest $request, ItemPhotoService $photos): JsonResponse
     {
-        $admin = $request->user();
-
-        $item = $admin->items()->create([
+        $item = $request->user()->items()->create([
             ...Arr::except($request->validated(), ['photo']),
             'photo_path' => $photos->store($request->file('photo')),
-            'moderation_status' => ModerationStatus::Approved,
-            'moderated_by' => $admin->id,
-            'moderated_at' => now(),
+            'moderation_status' => ModerationStatus::Pending,
         ]);
 
         return ItemResource::make($item->load(['category', 'user:id,name']))
@@ -54,14 +70,27 @@ class ItemController extends Controller
             ->setStatusCode(201);
     }
 
-    /** Untuk upload foto saat update gunakan POST + field _method=PUT. */
+    /**
+     * Pemilik mengubah laporannya. Jika laporan sudah approved, maka
+     * kembali ke "pending" agar admin memeriksa ulang perubahannya.
+     *
+     * Catatan: untuk upload foto saat update gunakan POST + field _method=PUT.
+     */
     public function update(UpdateItemRequest $request, Item $item, ItemPhotoService $photos): ItemResource
     {
+        Gate::authorize('update', $item);
+
         $data = Arr::except($request->validated(), ['photo']);
 
         if ($request->hasFile('photo')) {
             $photos->delete($item->photo_path);
             $data['photo_path'] = $photos->store($request->file('photo'));
+        }
+
+        if ($item->isApproved()) {
+            $data['moderation_status'] = ModerationStatus::Pending;
+            $data['moderated_by'] = null;
+            $data['moderated_at'] = null;
         }
 
         $item->update($data);
@@ -71,24 +100,11 @@ class ItemController extends Controller
 
     public function destroy(Item $item, ItemPhotoService $photos): Response
     {
+        Gate::authorize('delete', $item);
+
         $photos->delete($item->photo_path);
         $item->delete();
 
         return response()->noContent();
-    }
-
-    /** Setujui (approved) atau blokir (blocked, wajib alasan) sebuah laporan. */
-    public function moderate(ModerateItemRequest $request, Item $item): ItemResource
-    {
-        $status = ModerationStatus::from($request->validated('status'));
-
-        $item->update([
-            'moderation_status' => $status,
-            'blocked_reason' => $status === ModerationStatus::Blocked ? $request->validated('reason') : null,
-            'moderated_by' => $request->user()->id,
-            'moderated_at' => now(),
-        ]);
-
-        return ItemResource::make($item->load(['category', 'user:id,name']));
     }
 }
