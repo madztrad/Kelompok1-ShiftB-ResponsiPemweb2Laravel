@@ -1,8 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Enums;
 
 enum ModerationStatus: string
 {
-    //
+    case Pending = 'pending';
+    case Approved = 'approved';
+    case Blocked = 'blocked';
 }
