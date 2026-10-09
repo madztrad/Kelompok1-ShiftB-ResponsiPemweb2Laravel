@@ -7,6 +7,7 @@ use App\Livewire\Admin\ManageUsers;
 use App\Livewire\Admin\ModerationQueue;
 use App\Livewire\Home;
 use App\Livewire\Items\BrowseItems;
+use App\Livewire\Items\ShowItem;
 use App\Livewire\Login;
 use App\Livewire\Register;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', Home::class)->name('home');
 
 Route::get('/items', BrowseItems::class)->name('items.index');
+Route::get('/items/{item}', ShowItem::class)->whereNumber('item')->name('items.show');
 
 Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');

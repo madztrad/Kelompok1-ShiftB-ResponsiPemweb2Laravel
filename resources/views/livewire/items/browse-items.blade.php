@@ -93,7 +93,7 @@
     {{-- Grid kartu --}}
     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" x-show="! loading && items.length > 0" x-cloak>
         <template x-for="item in items" :key="item.id">
-            <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+            <a :href="'/items/' + item.id" class="block overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:border-gray-300 hover:shadow-sm">
                 <template x-if="item.photo_url">
                     <img :src="item.photo_url" :alt="item.title" class="h-44 w-full object-cover">
                 </template>
@@ -120,7 +120,7 @@
                         </div>
                     </dl>
                 </div>
-            </article>
+            </a>
         </template>
     </div>
 
