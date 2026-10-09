@@ -2,27 +2,13 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 
-#[Layout('components.layouts.app')]
 #[Title('Moderasi Laporan')]
-class ModerationQueue extends Component
+class ModerationQueue extends AdminPage
 {
-    public function mount()
+    protected function viewName(): string
     {
-        if (! session('api_token')) {
-            return redirect()->route('login');
-        }
-
-        if (session('user.role') !== 'admin') {
-            return redirect()->route('home');
-        }
-    }
-
-    public function render()
-    {
-        return view('livewire.admin.moderation-queue');
+        return 'livewire.admin.moderation-queue';
     }
 }

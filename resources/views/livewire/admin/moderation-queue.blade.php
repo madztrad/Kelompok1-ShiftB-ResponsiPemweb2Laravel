@@ -1,44 +1,44 @@
 <div
     class="mx-auto max-w-5xl px-6 py-10"
     x-data="{
-        base: '{{ url('/') }}',
-        token: @js(session('api_token')),
         items: [],
         loading: true,
         notice: '',
         error: '',
         blockingId: null,
         reason: '',
+        detail: null,
+        detailLoading: false,
         async load() {
             this.loading = true;
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/items?moderation_status=pending&per_page=50`, {
-                headers: this.headers(),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json();
-            this.items = data.data || [];
+            const res = await api.get('/admin/items?moderation_status=pending&per_page=50');
+            this.items = res.data.data || [];
             this.loading = false;
         },
-        headers() {
-            return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token };
+        async openDetail(id) {
+            this.detailLoading = true;
+            this.detail = { id };
+            this.error = '';
+            const res = await api.get(`/admin/items/${id}`);
+            if (res.ok) {
+                this.detail = res.data.data;
+            } else {
+                this.detail = null;
+                this.error = 'Gagal memuat detail laporan.';
+            }
+            this.detailLoading = false;
         },
-        toLogin() { window.location.href = '{{ route('login') }}'; },
+        closeDetail() { this.detail = null; },
         async approve(id) {
             this.notice = '';
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/items/${id}/moderation`, {
-                method: 'PATCH',
-                headers: this.headers(),
-                body: JSON.stringify({ status: 'approved' }),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.patch(`/admin/items/${id}/moderation`, { status: 'approved' });
             if (res.ok) {
                 this.items = this.items.filter((i) => i.id !== id);
                 this.notice = 'Laporan disetujui dan tampil di beranda.';
             } else {
-                const data = await res.json();
-                this.error = data.message || 'Gagal menyetujui laporan.';
+                this.error = res.data.message || 'Gagal menyetujui laporan.';
             }
         },
         async block(id) {
@@ -48,20 +48,14 @@
                 this.error = 'Alasan pemblokiran wajib diisi.';
                 return;
             }
-            const res = await fetch(`${this.base}/api/admin/items/${id}/moderation`, {
-                method: 'PATCH',
-                headers: this.headers(),
-                body: JSON.stringify({ status: 'blocked', reason: this.reason }),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.patch(`/admin/items/${id}/moderation`, { status: 'blocked', reason: this.reason });
             if (res.ok) {
                 this.items = this.items.filter((i) => i.id !== id);
                 this.blockingId = null;
                 this.reason = '';
                 this.notice = 'Laporan diblokir.';
             } else {
-                const data = await res.json();
-                this.error = data.message || 'Gagal memblokir laporan.';
+                this.error = res.data.message || 'Gagal memblokir laporan.';
             }
         },
     }"
@@ -102,6 +96,7 @@
                 </div>
 
                 <div class="mt-4 flex flex-wrap gap-2" x-show="blockingId !== item.id">
+                    <button @click="openDetail(item.id)" class="rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">Detail</button>
                     <button @click="approve(item.id)" class="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">Setujui</button>
                     <button @click="blockingId = item.id; reason = ''" class="rounded-full border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Blokir</button>
                 </div>
@@ -116,5 +111,67 @@
                 </div>
             </article>
         </template>
+    </div>
+
+    <div
+        x-show="detail"
+        x-cloak
+        class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 sm:items-center"
+        @click.self="closeDetail()"
+        @keydown.escape.window="closeDetail()"
+    >
+        <div class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl" @click.stop>
+            <template x-if="detailLoading">
+                <p class="text-sm text-gray-500">Memuat detail...</p>
+            </template>
+
+            <template x-if="! detailLoading && detail">
+                <div>
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h2 class="text-lg font-bold" x-text="detail.title"></h2>
+                            <p class="mt-0.5 text-xs uppercase tracking-wide text-gray-500" x-text="detail.type === 'found' ? 'Barang temuan' : 'Barang hilang'"></p>
+                        </div>
+                        <button @click="closeDetail()" class="text-gray-400 hover:text-gray-700" aria-label="Tutup">&times;</button>
+                    </div>
+
+                    <template x-if="detail.photo_url">
+                        <img :src="detail.photo_url" alt="" class="mt-4 max-h-56 w-full rounded-xl object-cover" />
+                    </template>
+                    <template x-if="! detail.photo_url">
+                        <p class="mt-4 rounded-xl bg-gray-50 px-4 py-6 text-center text-xs text-gray-400">Tanpa foto</p>
+                    </template>
+
+                    <dl class="mt-4 grid grid-cols-3 gap-x-3 gap-y-2 text-sm">
+                        <dt class="text-gray-500">Kategori</dt>
+                        <dd class="col-span-2" x-text="detail.category ? detail.category.name : '-'"></dd>
+
+                        <dt class="text-gray-500">Pelapor</dt>
+                        <dd class="col-span-2" x-text="detail.reporter ? detail.reporter.name : '-'"></dd>
+
+                        <dt class="text-gray-500">Lokasi</dt>
+                        <dd class="col-span-2" x-text="detail.location || '-'"></dd>
+
+                        <dt class="text-gray-500">Tanggal</dt>
+                        <dd class="col-span-2" x-text="detail.event_date || '-'"></dd>
+
+                        <dt class="text-gray-500">Klaim</dt>
+                        <dd class="col-span-2" x-text="detail.claims_count ?? 0"></dd>
+                    </dl>
+
+                    <div class="mt-3">
+                        <p class="text-sm text-gray-500">Deskripsi</p>
+                        <p class="mt-1 whitespace-pre-line text-sm text-gray-800" x-text="detail.description || '-'"></p>
+                    </div>
+
+                    <p class="mt-4 text-xs text-gray-400" x-text="'Dibuat ' + new Date(detail.created_at).toLocaleString('id-ID')"></p>
+
+                    <div class="mt-5 flex flex-wrap justify-end gap-2">
+                        <button @click="approve(detail.id); closeDetail()" class="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">Setujui</button>
+                        <button @click="closeDetail(); blockingId = detail.id; reason = ''" class="rounded-full border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50">Blokir</button>
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
 </div>

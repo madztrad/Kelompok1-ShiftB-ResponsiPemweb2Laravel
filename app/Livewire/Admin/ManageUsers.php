@@ -2,15 +2,25 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('components.layouts.app')]
 #[Title('Kelola Pengguna')]
-class ManageUsers extends ModerationQueue
+class ManageUsers extends AdminPage
 {
-    public function render()
+    public string $name = '';
+
+    public string $email = '';
+
+    public string $password = '';
+
+    public string $role = 'user';
+
+    public ?int $editingId = null;
+
+    public string $editRole = 'user';
+
+    protected function viewName(): string
     {
-        return view('livewire.admin.manage-users');
+        return 'livewire.admin.manage-users';
     }
 }

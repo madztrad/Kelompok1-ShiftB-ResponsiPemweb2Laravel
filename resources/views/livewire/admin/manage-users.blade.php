@@ -1,8 +1,6 @@
 <div
     class="mx-auto max-w-5xl px-6 py-10"
     x-data="{
-        base: '{{ url('/') }}',
-        token: @js(session('api_token')),
         users: [],
         loading: true,
         notice: '',
@@ -11,79 +9,84 @@
         form: { name: '', email: '', password: '', role: 'user' },
         editingId: null,
         editRole: 'user',
-        headers(json = true) {
-            const h = { 'Accept': 'application/json', 'Authorization': 'Bearer ' + this.token };
-            if (json) h['Content-Type'] = 'application/json';
-            return h;
-        },
-        toLogin() { window.location.href = '{{ route('login') }}'; },
+        editOpen: false,
+        editId: null,
+        editErrors: {},
+        editForm: { name: '', email: '', password: '' },
         async load() {
             this.loading = true;
-            const res = await fetch(`${this.base}/api/admin/users?per_page=50`, { headers: this.headers(false) });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json();
-            this.users = data.data || [];
+            const res = await api.get('/admin/users?per_page=50');
+            this.users = res.data.data || [];
             this.loading = false;
         },
         async create() {
             this.notice = '';
             this.error = '';
             this.formErrors = {};
-            const res = await fetch(`${this.base}/api/admin/users`, {
-                method: 'POST',
-                headers: this.headers(),
-                body: JSON.stringify(this.form),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json().catch(() => ({}));
+            const res = await api.post('/admin/users', this.form);
             if (res.status === 201) {
                 this.form = { name: '', email: '', password: '', role: 'user' };
                 this.notice = 'Pengguna dibuat.';
                 this.load();
             } else if (res.status === 422) {
-                this.formErrors = data.errors || {};
-                this.error = data.message || 'Periksa input.';
+                this.formErrors = res.data.errors || {};
+                this.error = res.data.message || 'Periksa input.';
             } else {
-                this.error = data.message || 'Gagal membuat pengguna.';
+                this.error = res.data.message || 'Gagal membuat pengguna.';
             }
         },
         async saveRole(id) {
             this.notice = '';
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/users/${id}`, {
-                method: 'PUT',
-                headers: this.headers(),
-                body: JSON.stringify({ role: this.editRole }),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json().catch(() => ({}));
+            const res = await api.put(`/admin/users/${id}`, { role: this.editRole });
             if (res.ok) {
                 this.editingId = null;
                 this.notice = 'Role diperbarui. Token pengguna dicabut, ia harus login ulang.';
                 this.load();
             } else {
-                this.error = data.message || 'Gagal memperbarui role.';
+                this.error = res.data.message || 'Gagal memperbarui role.';
+            }
+        },
+        openEdit(u) {
+            this.editId = u.id;
+            this.editErrors = {};
+            this.editForm = { name: u.name || '', email: u.email || '', password: '' };
+            this.editOpen = true;
+        },
+        closeEdit() { this.editOpen = false; },
+        async saveEdit() {
+            this.notice = '';
+            this.error = '';
+            this.editErrors = {};
+            const body = { name: this.editForm.name, email: this.editForm.email };
+            if (this.editForm.password) { body.password = this.editForm.password; }
+            const res = await api.put(`/admin/users/${this.editId}`, body);
+            if (res.ok) {
+                this.editOpen = false;
+                this.notice = 'Data pengguna diperbarui.';
+                this.load();
+            } else if (res.status === 422) {
+                this.editErrors = res.data.errors || {};
+                this.error = res.data.message || 'Periksa input.';
+            } else {
+                this.error = res.data.message || 'Gagal memperbarui pengguna.';
             }
         },
         async destroy(id) {
-            if (! confirm('Hapus pengguna ini? Laporannya ikut terhapus.')) return;
+            if (! api.confirm('Hapus pengguna ini? Laporannya ikut terhapus.')) return;
             this.notice = '';
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/users/${id}`, {
-                method: 'DELETE',
-                headers: this.headers(false),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.delete(`/admin/users/${id}`);
             if (res.status === 204) {
                 this.notice = 'Pengguna dihapus.';
                 this.load();
             } else {
-                const data = await res.json().catch(() => ({}));
-                this.error = data.message || 'Gagal menghapus pengguna.';
+                this.error = res.data.message || 'Gagal menghapus pengguna.';
             }
         },
     }"
     x-init="load()"
+    @keydown.escape.window="closeEdit()"
 >
     <div>
         <h1 class="text-2xl font-bold">Kelola Pengguna</h1>
@@ -156,6 +159,7 @@
                         </td>
                         <td class="px-4 py-3 text-right">
                             <span class="flex justify-end gap-2">
+                                <button @click="openEdit(u)" class="rounded-full border border-gray-300 px-3 py-1.5 text-xs font-semibold hover:bg-gray-50">Edit</button>
                                 <button @click="editingId = u.id; editRole = u.role" class="rounded-full border border-gray-300 px-3 py-1.5 text-xs font-semibold hover:bg-gray-50">Role</button>
                                 <button @click="destroy(u.id)" class="rounded-full border border-red-300 px-3 py-1.5 text-xs font-semibold text-red-700 hover:bg-red-50">Hapus</button>
                             </span>
@@ -164,5 +168,43 @@
                 </template>
             </tbody>
         </table>
+    </div>
+
+    <div
+        x-show="editOpen"
+        x-cloak
+        class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 sm:items-center"
+        @click.self="closeEdit()"
+    >
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl" @click.stop>
+            <div class="flex items-start justify-between gap-4">
+                <h2 class="text-lg font-bold">Edit pengguna</h2>
+                <button @click="closeEdit()" class="text-gray-400 hover:text-gray-700" aria-label="Tutup">&times;</button>
+            </div>
+
+            <div class="mt-4 grid gap-3">
+                <div>
+                    <label class="mb-1 block text-sm font-medium">Nama</label>
+                    <input x-model="editForm.name" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+                    <template x-if="editErrors.name"><p class="mt-1 text-xs text-red-600" x-text="editErrors.name[0]"></p></template>
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm font-medium">Email</label>
+                    <input x-model="editForm.email" type="email" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+                    <template x-if="editErrors.email"><p class="mt-1 text-xs text-red-600" x-text="editErrors.email[0]"></p></template>
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm font-medium">Password <span class="font-normal text-gray-500">(kosongkan jika tidak diganti)</span></label>
+                    <input x-model="editForm.password" type="password" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+                    <template x-if="editErrors.password"><p class="mt-1 text-xs text-red-600" x-text="editErrors.password[0]"></p></template>
+                </div>
+                <p class="text-xs text-gray-500">Mengubah password mencabut token pengguna; ia harus login ulang.</p>
+            </div>
+
+            <div class="mt-5 flex justify-end gap-2">
+                <button @click="closeEdit()" class="rounded-full border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">Batal</button>
+                <button @click="saveEdit()" class="rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700">Simpan</button>
+            </div>
+        </div>
     </div>
 </div>
