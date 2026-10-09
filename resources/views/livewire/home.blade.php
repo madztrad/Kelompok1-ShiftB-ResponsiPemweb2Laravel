@@ -92,8 +92,11 @@
             {{-- Laporan approved terbaru --}}
             <div class="mt-8">
                 <div class="flex flex-wrap items-end justify-between gap-2">
-                    <h2 class="text-sm font-semibold text-gray-900">Laporan Terbaru</h2>
-                    <p class="text-xs text-gray-400">Barang yang sudah disetujui admin.</p>
+                    <div>
+                        <h2 class="text-sm font-semibold text-gray-900">Laporan Terbaru</h2>
+                        <p class="text-xs text-gray-400">Barang yang sudah disetujui admin.</p>
+                    </div>
+                    <a href="{{ route('items.index') }}" wire:navigate class="text-xs font-medium text-indigo-600 hover:underline">Lihat semua →</a>
                 </div>
 
                 <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" x-show="! loading && recent.length > 0" x-cloak>
