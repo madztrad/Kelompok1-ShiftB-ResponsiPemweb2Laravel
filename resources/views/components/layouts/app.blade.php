@@ -24,7 +24,7 @@
 
                 @if (session('user.role') === 'admin')
                     <nav class="hidden gap-1 text-sm text-gray-600 md:flex">
-                        <a href="{{ route('admin') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin')])>Dashboard</a>
+                        <a href="{{ route('admin.index') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.index')])>Dashboard</a>
                         <a href="{{ route('admin.moderation') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.moderation')])>Moderasi</a>
                         <a href="{{ route('admin.items') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.items')])>Laporan</a>
                         <a href="{{ route('admin.users') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>

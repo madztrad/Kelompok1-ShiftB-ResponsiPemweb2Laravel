@@ -25,7 +25,7 @@ it('menyimpan token di session setelah fetch API sukses', function () {
 it('mengarahkan admin ke portal admin setelah login', function () {
     Livewire::test(Login::class)
         ->call('simpanToken', 'token-admin-123', ['id' => 1, 'name' => 'Admin', 'role' => 'admin'])
-        ->assertRedirect(route('admin'));
+        ->assertRedirect(route('admin.index'));
 });
 
 it('menampilkan pesan error dari API', function () {

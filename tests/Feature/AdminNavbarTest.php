@@ -21,13 +21,13 @@ it('menampilkan dashboard sebagai halaman utama portal admin', function () {
 
     $this->actingAs($admin)
         ->withSession(['api_token' => 'token-admin', 'user' => ['id' => $admin->id, 'name' => $admin->name, 'role' => 'admin']])
-        ->get(route('admin'))
+        ->get(route('admin.index'))
         ->assertOk()
         ->assertSee('Dashboard Admin');
 });
 
 it('memisahkan rute moderasi dari dashboard', function () {
-    expect(route('admin'))->toEndWith('/admin')
+    expect(route('admin.index'))->toEndWith('/admin')
         ->and(route('admin.moderation'))->toEndWith('/admin/moderasi');
 });
 
