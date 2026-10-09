@@ -70,22 +70,22 @@
                 </div>
             </div>
 
-            {{-- Aksi cepat (belum aktif sampai halaman tujuannya dibuat) --}}
+            {{-- Aksi cepat --}}
             <div class="mt-8" x-show="! loading" x-cloak>
                 <h2 class="text-sm font-semibold text-gray-900">Aksi Cepat</h2>
                 <div class="mt-3 grid gap-3 sm:grid-cols-3">
-                    <button type="button" disabled title="Segera hadir" class="flex cursor-not-allowed items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left opacity-70">
+                    <a href="{{ route('items.create') }}" wire:navigate class="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-900 hover:bg-gray-50">
                         <span class="text-sm font-medium text-gray-700">Lapor Barang</span>
-                        <span class="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500">Segera hadir</span>
-                    </button>
-                    <button type="button" disabled title="Segera hadir" class="flex cursor-not-allowed items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left opacity-70">
+                        <span class="text-gray-400">&rarr;</span>
+                    </a>
+                    <a href="{{ route('my.items') }}" wire:navigate class="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-900 hover:bg-gray-50">
                         <span class="text-sm font-medium text-gray-700">Laporan Saya</span>
-                        <span class="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500">Segera hadir</span>
-                    </button>
-                    <button type="button" disabled title="Segera hadir" class="flex cursor-not-allowed items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left opacity-70">
+                        <span class="text-gray-400">&rarr;</span>
+                    </a>
+                    <a href="{{ route('my.claims') }}" wire:navigate class="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-left transition hover:border-gray-900 hover:bg-gray-50">
                         <span class="text-sm font-medium text-gray-700">Klaim Saya</span>
-                        <span class="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-500">Segera hadir</span>
-                    </button>
+                        <span class="text-gray-400">&rarr;</span>
+                    </a>
                 </div>
             </div>
 

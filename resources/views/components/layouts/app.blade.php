@@ -34,6 +34,7 @@
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
                         <a href="{{ route('home') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('home')])>Beranda</a>
                         <a href="{{ route('items.index') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('items.index')])>Katalog</a>
+                        <a href="{{ route('my.items') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('my.*')])>Laporan Saya</a>
                     </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
