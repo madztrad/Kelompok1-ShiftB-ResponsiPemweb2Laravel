@@ -19,7 +19,7 @@ class Login extends Component
     public function mount()
     {
         if (session('api_token')) {
-            return redirect()->route('home');
+            return redirect()->route($this->homeRoute());
         }
     }
 
@@ -44,7 +44,7 @@ class Login extends Component
             'user' => $user,
         ]);
 
-        return redirect()->route('home');
+        return redirect()->route($this->homeRoute($user));
     }
 
     // Dipanggil dari browser kalau API menjawab error (401/422).
@@ -56,5 +56,11 @@ class Login extends Component
     public function render()
     {
         return view('livewire.login');
+    }
+
+    /** Admin langsung masuk portal admin, pengguna biasa ke beranda. */
+    protected function homeRoute(?array $user = null): string
+    {
+        return (($user ?? session('user'))['role'] ?? null) === 'admin' ? 'admin' : 'home';
     }
 }

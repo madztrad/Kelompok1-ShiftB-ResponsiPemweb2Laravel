@@ -16,11 +16,20 @@
             <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
                 <a href="{{ route('home') }}" class="font-bold">🔍 Lost &amp; Found</a>
 
-                <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
-                    <a href="#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
-                    <a href="#kategori" class="hover:text-gray-900">Kategori</a>
-                    <a href="#daftar" class="hover:text-gray-900">Gabung</a>
-                </nav>
+                @if (session('user.role') === 'admin')
+                    <nav class="hidden gap-1 text-sm text-gray-600 md:flex">
+                        <a href="{{ route('admin') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin')])>Moderasi</a>
+                        <a href="{{ route('admin.items') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.items')])>Laporan</a>
+                        <a href="{{ route('admin.users') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
+                        <a href="{{ route('admin.categories') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
+                    </nav>
+                @else
+                    <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
+                        <a href="#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
+                        <a href="#kategori" class="hover:text-gray-900">Kategori</a>
+                        <a href="#daftar" class="hover:text-gray-900">Gabung</a>
+                    </nav>
+                @endif
 
                 @if (session('api_token'))
                     <div class="flex items-center gap-3 text-sm">

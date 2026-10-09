@@ -22,6 +22,12 @@ it('menyimpan token di session setelah fetch API sukses', function () {
         ->and(session('user.name'))->toBe('User Test');
 });
 
+it('mengarahkan admin ke portal admin setelah login', function () {
+    Livewire::test(Login::class)
+        ->call('simpanToken', 'token-admin-123', ['id' => 1, 'name' => 'Admin', 'role' => 'admin'])
+        ->assertRedirect(route('admin'));
+});
+
 it('menampilkan pesan error dari API', function () {
     Livewire::test(Login::class)
         ->call('terimaApiError', 'Email atau password salah.')
