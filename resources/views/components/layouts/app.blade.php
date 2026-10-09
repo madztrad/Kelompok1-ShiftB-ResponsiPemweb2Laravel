@@ -25,9 +25,9 @@
                     </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
-                        <a href="#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
-                        <a href="#kategori" class="hover:text-gray-900">Kategori</a>
-                        <a href="#daftar" class="hover:text-gray-900">Gabung</a>
+                        <a href="{{ route('home') }}#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
+                        <a href="{{ route('home') }}#kategori" class="hover:text-gray-900">Kategori</a>
+                        <a href="{{ route('home') }}#daftar" class="hover:text-gray-900">Gabung</a>
                     </nav>
                 @endif
 
