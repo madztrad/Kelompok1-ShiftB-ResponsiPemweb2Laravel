@@ -5,11 +5,13 @@ use App\Livewire\Admin\ManageCategories;
 use App\Livewire\Admin\ManageItems;
 use App\Livewire\Admin\ManageUsers;
 use App\Livewire\Admin\ModerationQueue;
+use App\Livewire\Home;
 use App\Livewire\Login;
 use App\Livewire\Register;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'pages.landing')->name('home');
+// Beranda: dashboard untuk user login, landing page untuk tamu.
+Route::get('/', Home::class)->name('home');
 
 Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');

@@ -30,6 +30,10 @@
                         <a href="{{ route('admin.users') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
                         <a href="{{ route('admin.categories') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
                     </nav>
+                @elseif (session('api_token'))
+                    <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
+                        <a href="{{ route('home') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('home')])>Beranda</a>
+                    </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
                         <a href="#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
