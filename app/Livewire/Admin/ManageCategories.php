@@ -2,15 +2,19 @@
 
 namespace App\Livewire\Admin;
 
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('components.layouts.app')]
 #[Title('Kelola Kategori')]
-class ManageCategories extends ModerationQueue
+class ManageCategories extends AdminPage
 {
-    public function render()
+    public string $name = '';
+
+    public ?int $editingId = null;
+
+    public string $editName = '';
+
+    protected function viewName(): string
     {
-        return view('livewire.admin.manage-categories');
+        return 'livewire.admin.manage-categories';
     }
 }

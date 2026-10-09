@@ -9,6 +9,12 @@
 
         @fonts
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        {{-- Base URL & token API disuntik ke helper window.api (resources/js/app.js). --}}
+        <script>
+            window.__apiBase = @js(url('/api'));
+            window.__apiToken = @js(session('api_token'));
+        </script>
     </head>
     <body class="bg-white text-gray-900">
         {{-- Navbar --}}
@@ -18,10 +24,11 @@
 
                 @if (session('user.role') === 'admin')
                     <nav class="hidden gap-1 text-sm text-gray-600 md:flex">
-                        <a href="{{ route('admin') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin')])>Moderasi</a>
-                        <a href="{{ route('admin.items') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.items')])>Laporan</a>
-                        <a href="{{ route('admin.users') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
-                        <a href="{{ route('admin.categories') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
+                        <a href="{{ route('admin') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin')])>Dashboard</a>
+                        <a href="{{ route('admin.moderation') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.moderation')])>Moderasi</a>
+                        <a href="{{ route('admin.items') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.items')])>Laporan</a>
+                        <a href="{{ route('admin.users') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
+                        <a href="{{ route('admin.categories') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
                     </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
