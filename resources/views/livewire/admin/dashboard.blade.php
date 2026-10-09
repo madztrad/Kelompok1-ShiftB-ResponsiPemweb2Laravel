@@ -19,14 +19,16 @@
                 });
 
                 // Kartu ringkasan: hitung total lewat meta.total dari permintaan 1 item.
-                const [pending, approved, blocked, users, recentRes, ...trendRes] = await Promise.all([
+                const [pending, approved, blocked, users, recentRes] = await Promise.all([
                     api.get('/admin/items?moderation_status=pending&per_page=1'),
                     api.get('/admin/items?moderation_status=approved&per_page=1'),
                     api.get('/admin/items?moderation_status=blocked&per_page=1'),
                     api.get('/admin/users?n=1'),
                     api.get('/admin/items?moderation_status=pending&per_page=5'),
-                    ...days.map((d) => api.get(`/admin/items?date_from=${d}&date_to=${d}&per_page=1`)),
                 ]);
+                const trendRes = await Promise.all(
+                    days.map((d) => api.get(`/admin/items?date_from=${d}&date_to=${d}&per_page=1`)),
+                );
 
                 this.cards.pending = pending.data.meta?.total ?? 0;
                 this.cards.approved = approved.data.meta?.total ?? 0;

@@ -184,6 +184,7 @@
         x-cloak
         class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4 sm:items-center"
         @click.self="closeDetail()"
+        @keydown.escape.window="closeDetail()"
     >
         <div class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl" @click.stop>
             <template x-if="detailLoading">
@@ -202,6 +203,9 @@
 
                     <template x-if="detail.photo_url">
                         <img :src="detail.photo_url" alt="" class="mt-4 max-h-56 w-full rounded-xl object-cover" />
+                    </template>
+                    <template x-if="! detail.photo_url">
+                        <p class="mt-4 rounded-xl bg-gray-50 px-4 py-6 text-center text-xs text-gray-400">Tanpa foto</p>
                     </template>
 
                     <dl class="mt-4 grid grid-cols-3 gap-x-3 gap-y-2 text-sm">
@@ -307,7 +311,7 @@
                         Foto
                         <span class="font-normal text-gray-500" x-text="formEditId ? '(biarkan kosong jika tidak diganti)' : '(wajib)'"></span>
                     </label>
-                    <input type="file" accept="image/*" @change="form.photo = $event.target.files[0]" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
+                    <input type="file" accept="image/jpeg,image/png,image/webp" @change="form.photo = $event.target.files[0]" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm" />
                     <template x-if="formErrors.photo"><p class="mt-1 text-xs text-red-600" x-text="formErrors.photo[0]"></p></template>
                 </div>
             </div>
