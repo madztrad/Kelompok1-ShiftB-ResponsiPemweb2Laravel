@@ -30,11 +30,18 @@
                         <a href="{{ route('admin.users') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
                         <a href="{{ route('admin.categories') }}" wire:navigate @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
                     </nav>
+                @elseif (session('api_token'))
+                    <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
+                        <a href="{{ route('home') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('home')])>Beranda</a>
+                        <a href="{{ route('items.index') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('items.index')])>Katalog</a>
+                        <a href="{{ route('my.items') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('my.*')])>Laporan Saya</a>
+                    </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
-                        <a href="#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
-                        <a href="#kategori" class="hover:text-gray-900">Kategori</a>
-                        <a href="#daftar" class="hover:text-gray-900">Gabung</a>
+                        <a href="{{ route('items.index') }}" wire:navigate @class(['hover:text-gray-900', 'font-semibold text-gray-900' => request()->routeIs('items.index')])>Katalog</a>
+                        <a href="{{ route('home') }}#cara-kerja" class="hover:text-gray-900">Cara Kerja</a>
+                        <a href="{{ route('home') }}#kategori" class="hover:text-gray-900">Kategori</a>
+                        <a href="{{ route('home') }}#daftar" class="hover:text-gray-900">Gabung</a>
                     </nav>
                 @endif
 
