@@ -16,7 +16,7 @@
 | No  | Nama Lengkap          | NIM       | Shift Awal   | Shift Akhir   | Jobdesk / Kontribusi         | Link Video Penjelasan                   |
 | --- | --------------------- | --------- | ------------ | ------------- | ---------------------------- | --------------------------------------- |
 | 1   | Muhammad Faiz Mubarok | H1H024051 | Shift B      | Shift B       | CRUD Admin & Dashboard Admin | [YouTube](https://youtu.be/chOvOX0e-d8) |
-| 2   | [Nama Lengkap]        | [NIM]     | [Shift Awal] | [Shift Akhir] | [Jobdesk Fitur]              | [YouTube/Drive](https://...)            |
+| 2   | Hafish athallah       | H1H024052 | Shift D      | Shift B       | FE (Autentikasi & Page User) | [YouTube/Drive](https://...)            |
 | 3   | [Nama Lengkap]        | [NIM]     | [Shift Awal] | [Shift Akhir] | [Jobdesk Fitur]              | [YouTube/Drive](https://...)            |
 
 ---
