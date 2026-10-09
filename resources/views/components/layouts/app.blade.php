@@ -25,6 +25,9 @@
                 @if (session('api_token'))
                     <div class="flex items-center gap-3 text-sm">
                         <span class="hidden text-gray-600 sm:inline">Halo, {{ session('user.name') }}</span>
+                        @if (session('user.role') === 'admin')
+                            <a href="{{ route('admin') }}" class="rounded-full bg-violet-600 px-4 py-2 text-white hover:bg-violet-500">Admin</a>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="rounded-full border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50">
