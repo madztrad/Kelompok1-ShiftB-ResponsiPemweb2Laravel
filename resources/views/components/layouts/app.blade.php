@@ -18,10 +18,10 @@
 
                 @if (session('user.role') === 'admin')
                     <nav class="hidden gap-1 text-sm text-gray-600 md:flex">
-                        <a href="{{ route('admin') }}" wire:navigate wire:current="bg-gray-100 text-gray-900" class="rounded-full px-3 py-2 hover:text-gray-900">Moderasi</a>
-                        <a href="{{ route('admin.items') }}" wire:navigate wire:current="bg-gray-100 text-gray-900" class="rounded-full px-3 py-2 hover:text-gray-900">Laporan</a>
-                        <a href="{{ route('admin.users') }}" wire:navigate wire:current="bg-gray-100 text-gray-900" class="rounded-full px-3 py-2 hover:text-gray-900">Pengguna</a>
-                        <a href="{{ route('admin.categories') }}" wire:navigate wire:current="bg-gray-100 text-gray-900" class="rounded-full px-3 py-2 hover:text-gray-900">Kategori</a>
+                        <a href="{{ route('admin') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin')])>Moderasi</a>
+                        <a href="{{ route('admin.items') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.items')])>Laporan</a>
+                        <a href="{{ route('admin.users') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.users')])>Pengguna</a>
+                        <a href="{{ route('admin.categories') }}" @class(['rounded-full px-3 py-2 hover:text-gray-900', 'bg-gray-100 text-gray-900' => request()->routeIs('admin.categories')])>Kategori</a>
                     </nav>
                 @else
                     <nav class="hidden gap-6 text-sm text-gray-600 md:flex">
@@ -43,8 +43,8 @@
                     </div>
                 @else
                     <div class="flex gap-2 text-sm">
-                        <a href="{{ route('login') }}" wire:navigate class="rounded-full px-4 py-2 hover:bg-gray-100">Masuk</a>
-                        <a href="{{ route('register') }}" wire:navigate class="rounded-full bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">Daftar</a>
+                        <a href="{{ route('login') }}" class="rounded-full px-4 py-2 hover:bg-gray-100">Masuk</a>
+                        <a href="{{ route('register') }}" class="rounded-full bg-gray-900 px-4 py-2 text-white hover:bg-gray-700">Daftar</a>
                     </div>
                 @endif
             </div>
