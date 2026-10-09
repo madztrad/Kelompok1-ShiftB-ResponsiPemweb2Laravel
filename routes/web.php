@@ -1,3 +1,4 @@
+
 <?php
 
 use App\Livewire\Admin\Dashboard;
@@ -15,32 +16,37 @@ use App\Livewire\My\MyItems;
 use App\Livewire\Register;
 use Illuminate\Support\Facades\Route;
 
-// Beranda: dashboard untuk user login, landing page untuk tamu.
+// Beranda
 Route::get('/', Home::class)->name('home');
 
+// Katalog dan laporan barang
 Route::get('/items', BrowseItems::class)->name('items.index');
 Route::get('/items/create', CreateItem::class)->name('items.create');
-Route::get('/items/{item}', ShowItem::class)->whereNumber('item')->name('items.show');
+Route::get('/items/{item}', ShowItem::class)
+    ->whereNumber('item')
+    ->name('items.show');
 
-// Halaman pengguna yang butuh login.
+// Halaman pengguna
 Route::get('/my/items', MyItems::class)->name('my.items');
 Route::get('/my/claims', MyClaims::class)->name('my.claims');
 
+// Autentikasi
 Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');
 
-Route::prefix('admin')->name('admin')->group(function () {
-    Route::get('/', Dashboard::class)->name('');
-    Route::get('/moderasi', ModerationQueue::class)->name('.moderation');
-    Route::get('/items', ManageItems::class)->name('.items');
-    Route::get('/users', ManageUsers::class)->name('.users');
-    Route::get('/categories', ManageCategories::class)->name('.categories');
+// Admin
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', Dashboard::class)->name('index');
+    Route::get('/moderasi', ModerationQueue::class)->name('moderation');
+    Route::get('/items', ManageItems::class)->name('items');
+    Route::get('/users', ManageUsers::class)->name('users');
+    Route::get('/categories', ManageCategories::class)->name('categories');
 });
 
+// Logout
 Route::post('/logout', function () {
-    // Hapus token dari session saja. Tidak memanggil API logout dari sini
-    // karena bisa deadlock (deadlock self-call di php artisan serve).
     session()->flush();
 
     return redirect()->route('home');
 })->name('logout');
+
