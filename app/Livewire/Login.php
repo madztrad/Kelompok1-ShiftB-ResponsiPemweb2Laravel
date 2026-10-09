@@ -61,6 +61,8 @@ class Login extends Component
     /** Admin langsung masuk portal admin, pengguna biasa ke beranda. */
     protected function homeRoute(?array $user = null): string
     {
-        return (($user ?? session('user'))['role'] ?? null) === 'admin' ? 'admin' : 'home';
+
+        return (($user ?? session('user'))['role'] ?? null) === 'admin' ? 'admin' : 'items.index';
+
     }
 }

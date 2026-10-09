@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Claim;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Models\Claim */
+/** @mixin Claim */
 class ClaimResource extends JsonResource
 {
     public function toArray(Request $request): array
