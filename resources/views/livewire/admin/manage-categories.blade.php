@@ -1,8 +1,6 @@
 <div
     class="mx-auto max-w-3xl px-6 py-10"
     x-data="{
-        base: '{{ url('/') }}',
-        token: @js(session('api_token')),
         categories: [],
         loading: true,
         notice: '',
@@ -10,73 +8,48 @@
         name: '',
         editingId: null,
         editName: '',
-        headers(json = true) {
-            const h = { 'Accept': 'application/json', 'Authorization': 'Bearer ' + this.token };
-            if (json) h['Content-Type'] = 'application/json';
-            return h;
-        },
-        toLogin() { window.location.href = '{{ route('login') }}'; },
         async load() {
             this.loading = true;
-            const res = await fetch(`${this.base}/api/categories`, { headers: this.headers(false) });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json();
-            this.categories = data.data || [];
+            const res = await api.get('/categories');
+            this.categories = res.data.data || [];
             this.loading = false;
         },
         async create() {
             this.notice = '';
             this.error = '';
             if (! this.name.trim()) { this.error = 'Nama kategori wajib diisi.'; return; }
-            const res = await fetch(`${this.base}/api/admin/categories`, {
-                method: 'POST',
-                headers: this.headers(),
-                body: JSON.stringify({ name: this.name.trim() }),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json().catch(() => ({}));
+            const res = await api.post('/admin/categories', { name: this.name.trim() });
             if (res.status === 201) {
                 this.name = '';
                 this.notice = 'Kategori ditambahkan.';
                 this.load();
             } else {
-                this.error = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Gagal menambah kategori.');
+                this.error = (res.data.errors && res.data.errors.name) ? res.data.errors.name[0] : (res.data.message || 'Gagal menambah kategori.');
             }
         },
         async save(id) {
             this.notice = '';
             this.error = '';
             if (! this.editName.trim()) { this.error = 'Nama kategori wajib diisi.'; return; }
-            const res = await fetch(`${this.base}/api/admin/categories/${id}`, {
-                method: 'PUT',
-                headers: this.headers(),
-                body: JSON.stringify({ name: this.editName.trim() }),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json().catch(() => ({}));
+            const res = await api.put(`/admin/categories/${id}`, { name: this.editName.trim() });
             if (res.ok) {
                 this.editingId = null;
                 this.notice = 'Kategori diperbarui.';
                 this.load();
             } else {
-                this.error = (data.errors && data.errors.name) ? data.errors.name[0] : (data.message || 'Gagal memperbarui kategori.');
+                this.error = (res.data.errors && res.data.errors.name) ? res.data.errors.name[0] : (res.data.message || 'Gagal memperbarui kategori.');
             }
         },
         async destroy(id) {
-            if (! confirm('Hapus kategori ini?')) return;
+            if (! api.confirm('Hapus kategori ini?')) return;
             this.notice = '';
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/categories/${id}`, {
-                method: 'DELETE',
-                headers: this.headers(false),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.delete(`/admin/categories/${id}`);
             if (res.status === 204) {
                 this.notice = 'Kategori dihapus.';
                 this.load();
             } else {
-                const data = await res.json().catch(() => ({}));
-                this.error = data.message || 'Gagal menghapus kategori.';
+                this.error = res.data.message || 'Gagal menghapus kategori.';
             }
         },
     }"

@@ -4,11 +4,11 @@ namespace App\Livewire\Admin;
 
 use Livewire\Attributes\Title;
 
-#[Title('Kelola Laporan')]
-class ManageItems extends AdminPage
+#[Title('Dashboard Admin')]
+class Dashboard extends AdminPage
 {
     protected function viewName(): string
     {
-        return 'livewire.admin.manage-items';
+        return 'livewire.admin.dashboard';
     }
 }

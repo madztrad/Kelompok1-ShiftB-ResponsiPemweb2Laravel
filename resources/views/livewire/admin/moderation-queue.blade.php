@@ -1,8 +1,6 @@
 <div
     class="mx-auto max-w-5xl px-6 py-10"
     x-data="{
-        base: '{{ url('/') }}',
-        token: @js(session('api_token')),
         items: [],
         loading: true,
         notice: '',
@@ -12,33 +10,19 @@
         async load() {
             this.loading = true;
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/items?moderation_status=pending&per_page=50`, {
-                headers: this.headers(),
-            });
-            if (res.status === 401) return this.toLogin();
-            const data = await res.json();
-            this.items = data.data || [];
+            const res = await api.get('/admin/items?moderation_status=pending&per_page=50');
+            this.items = res.data.data || [];
             this.loading = false;
         },
-        headers() {
-            return { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token };
-        },
-        toLogin() { window.location.href = '{{ route('login') }}'; },
         async approve(id) {
             this.notice = '';
             this.error = '';
-            const res = await fetch(`${this.base}/api/admin/items/${id}/moderation`, {
-                method: 'PATCH',
-                headers: this.headers(),
-                body: JSON.stringify({ status: 'approved' }),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.patch(`/admin/items/${id}/moderation`, { status: 'approved' });
             if (res.ok) {
                 this.items = this.items.filter((i) => i.id !== id);
                 this.notice = 'Laporan disetujui dan tampil di beranda.';
             } else {
-                const data = await res.json();
-                this.error = data.message || 'Gagal menyetujui laporan.';
+                this.error = res.data.message || 'Gagal menyetujui laporan.';
             }
         },
         async block(id) {
@@ -48,20 +32,14 @@
                 this.error = 'Alasan pemblokiran wajib diisi.';
                 return;
             }
-            const res = await fetch(`${this.base}/api/admin/items/${id}/moderation`, {
-                method: 'PATCH',
-                headers: this.headers(),
-                body: JSON.stringify({ status: 'blocked', reason: this.reason }),
-            });
-            if (res.status === 401) return this.toLogin();
+            const res = await api.patch(`/admin/items/${id}/moderation`, { status: 'blocked', reason: this.reason });
             if (res.ok) {
                 this.items = this.items.filter((i) => i.id !== id);
                 this.blockingId = null;
                 this.reason = '';
                 this.notice = 'Laporan diblokir.';
             } else {
-                const data = await res.json();
-                this.error = data.message || 'Gagal memblokir laporan.';
+                this.error = res.data.message || 'Gagal memblokir laporan.';
             }
         },
     }"
