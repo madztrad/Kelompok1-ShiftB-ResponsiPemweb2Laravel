@@ -35,7 +35,7 @@
         <h1 class="text-2xl font-bold">Daftar</h1>
         <p class="mt-1 text-sm text-gray-600">
             Sudah punya akun?
-            <a href="{{ route('login') }}" class="font-medium text-emerald-600 hover:underline">Masuk di sini</a>
+            <a href="{{ route('login') }}" wire:navigate class="font-medium text-emerald-600 hover:underline">Masuk di sini</a>
         </p>
 
         <form wire:submit="register" class="mt-6 space-y-4">

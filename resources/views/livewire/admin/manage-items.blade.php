@@ -51,12 +51,9 @@
     }"
     x-init="load()"
 >
-    <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-            <h1 class="text-2xl font-bold">Semua Laporan</h1>
-            <p class="mt-1 text-sm text-gray-600">Lihat, saring, dan hapus laporan apa pun.</p>
-        </div>
-        <a href="{{ route('admin') }}" class="rounded-full border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50">← Antrean Moderasi</a>
+    <div>
+        <h1 class="text-2xl font-bold">Semua Laporan</h1>
+        <p class="mt-1 text-sm text-gray-600">Lihat, saring, dan hapus laporan apa pun.</p>
     </div>
 
     <template x-if="notice">

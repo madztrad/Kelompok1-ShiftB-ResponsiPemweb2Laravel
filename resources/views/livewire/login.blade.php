@@ -30,7 +30,7 @@
         <h1 class="text-2xl font-bold">Masuk</h1>
         <p class="mt-1 text-sm text-gray-600">
             Belum punya akun?
-            <a href="{{ route('register') }}" class="font-medium text-emerald-600 hover:underline">Daftar di sini</a>
+            <a href="{{ route('register') }}" wire:navigate class="font-medium text-emerald-600 hover:underline">Daftar di sini</a>
         </p>
 
         @if ($error)

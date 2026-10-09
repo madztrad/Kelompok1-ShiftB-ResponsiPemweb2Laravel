@@ -67,16 +67,9 @@
     }"
     x-init="load()"
 >
-    <div class="flex flex-wrap items-center justify-between gap-3">
-        <div>
-            <h1 class="text-2xl font-bold">Moderasi Laporan</h1>
-            <p class="mt-1 text-sm text-gray-600">Setujui laporan agar tampil di beranda, atau blokir beserta alasannya.</p>
-        </div>
-        <nav class="flex gap-2 text-sm">
-            <a href="{{ route('admin.items') }}" class="rounded-full border border-gray-300 px-4 py-2 hover:bg-gray-50">Semua Laporan</a>
-            <a href="{{ route('admin.users') }}" class="rounded-full border border-gray-300 px-4 py-2 hover:bg-gray-50">Pengguna</a>
-            <a href="{{ route('admin.categories') }}" class="rounded-full border border-gray-300 px-4 py-2 hover:bg-gray-50">Kategori</a>
-        </nav>
+    <div>
+        <h1 class="text-2xl font-bold">Moderasi Laporan</h1>
+        <p class="mt-1 text-sm text-gray-600">Setujui laporan agar tampil di beranda, atau blokir beserta alasannya.</p>
     </div>
 
     <template x-if="notice">
