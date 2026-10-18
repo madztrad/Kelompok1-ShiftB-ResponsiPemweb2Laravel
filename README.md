@@ -18,6 +18,8 @@
 | 1   | Muhammad Faiz Mubarok | H1H024051 | Shift B      | Shift B       | CRUD Admin & Dashboard Admin | [YouTube](https://youtu.be/chOvOX0e-d8) |
 | 2   | Hafish athallah       | H1H024052 | Shift D      | Shift B       | FE (Autentikasi & Page User) | [YouTube](https://youtu.be/nfqKGSokLC0?si=YxKUgO0hgN-uZNsm)            |
 | 3   | Dimas Rafif Zaidan        | H1H024043     | [Shift Awal] | [Shift Akhir] | Backend              | [YouTube](https://youtu.be/bp65uXiZMds)            |
+| 4   | Rasta Listiadi | H1H024053 | Shift D      | Shift B       | Halaman Katalog User | [YouTube](https://youtu.be/NertRXUpxrU) |
+
 
 ---
 
